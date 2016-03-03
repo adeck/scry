@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 
 import math
+from sys import argv
 
 def byte_frequencies(stream):
   from collections import Counter
@@ -32,13 +33,15 @@ def get_bitmap(stream):
   pixels = img.load()
   for i in xrange(length):    # for every byte
     v = stream[i]
-    pixels[i // dim, i % dim] = (v, v, v)
+    pixels[i % dim, i // dim] = (v, v, v)
   return img
 
 class Scry:
   def __init__(self, filename):
     self.filename = filename
   
+  # TODO -- remove this and replace it with something actually helpful to
+  #         other people.
   def temp_main(self):
     result = {}
     with open(self.filename, 'rb') as f:
@@ -47,12 +50,12 @@ class Scry:
       entropy = shannon_entropy(freq, len(stream))
       print 'num unique bytes present:', len(freq)
       print 'entropy:', entropy
-      get_histogram(freq).show()
       get_bitmap(stream).show()
+      get_histogram(freq).show()
 
 
 if __name__ == '__main__':
-  Scry('scry.py').temp_main()
+  Scry(argv[1]).temp_main()
 
 
 
